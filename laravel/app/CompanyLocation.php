@@ -11,6 +11,11 @@ class CompanyLocation extends Model
         'street_address_1',
         'street_address_2',
         'country_id',
-        'country_subdivision_item_id'
+        'country_subdivision_item_id',
+        'postal_code'
     ];
+
+    public function company() {
+        return $this->belongsTo(Company::class);
+    }
 }

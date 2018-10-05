@@ -7,62 +7,59 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import BootstrapVue from 'bootstrap-vue'
 
-Vue.config.devtools = false
-Vue.config.debug = false
-Vue.config.silent = true
+Vue.use(VueRouter)
+Vue.use(BootstrapVue)
 
-import VueRouter from 'vue-router';
+import App from './components/App'
+import Hello from './components/Hello'
+import Home from './components/Home'
+import UsersIndex from './components/UsersIndex';
+import CompaniesIndex from './components/CompaniesIndex';
+import StatusesIndex from './components/StatusesIndex';
+import StatusesCreate from './components/StatusesCreate';
 
-window.Vue.use(VueRouter);
+const router = new VueRouter({
+    mode: 'history',
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: Home
+        },
+        {
+            path: '/hello',
+            name: 'hello',
+            component: Hello
+        },
+        {
+            path: '/users',
+            name: 'users.index',
+            component: UsersIndex
+        },
+        {
+            path: '/companies',
+            name: 'companies.index',
+            component: CompaniesIndex
+        },
+        {
+            path: '/statuses',
+            name: 'statuses.index',
+            component: StatusesIndex
+        },
+        {
+            path: '/statuses/create',
+            name: 'statuses.create',
+            component: StatusesCreate
+        },
+    ],
+});
 
-import CompaniesIndex from './components/companies/CompaniesIndex.vue';
-// import PlayersCreate from './components/players/PlayersCreate.vue';
-// import PlayersEdit from './components/players/PlayersEdit.vue';
-//
-// import TeamsIndex from './components/teams/TeamsIndex.vue';
-// import TeamsCreate from './components/teams/TeamsCreate.vue';
-// import TeamsEdit from './components/teams/TeamsEdit.vue';
-
-const routes = [
-    // PLAYERS
-    {
-        path: '/admin/companies',
-        components: {
-            companiesIndex: CompaniesIndex
-        }
-    },
-    // {
-    //     path: '/admin/players/create',
-    //     component: PlayersCreate,
-    //     name: 'createPlayer'
-    // },
-    // {
-    //     path: '/admin/players/edit/:id',
-    //     component: PlayersEdit,
-    //     name: 'editPlayer'
-    // },
-    //
-    // // TEAMS
-    // {
-    //     path: '/admin/teams',
-    //     components: {
-    //         teamsIndex: TeamsIndex
-    //     }
-    // },
-    // {
-    //     path: '/admin/teams/create',
-    //     component: TeamsCreate,
-    //     name: 'createTeam'
-    // },
-    // {
-    //     path: '/admin/teams/edit/:id',
-    //     component: TeamsEdit,
-    //     name: 'editTeam'
-    // }
-]
-
-const router = new VueRouter({ routes })
-
-const app = new Vue({ router }).$mount('#app')
+const app = new Vue({
+    el: '#app',
+    components: { App },
+    router,
+});

@@ -16,10 +16,11 @@ class CreateCompanyLocationsTable extends Migration
         Schema::create('company_locations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id')->unsigned();
-            $table->text('street_address_1');
-            $table->text('street_address_2');
+            $table->text('street_address_1')->nullable();
+            $table->text('street_address_2')->nullable();
             $table->integer('country_id')->unsigned();
             $table->integer('country_subdivision_item_id')->unsigned();
+            $table->text('postal_code');
             $table->timestamps();
         });
     }
