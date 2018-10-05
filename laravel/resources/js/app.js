@@ -24,6 +24,9 @@ import UsersIndex from './components/UsersIndex';
 import CompaniesIndex from './components/CompaniesIndex';
 import StatusesIndex from './components/StatusesIndex';
 import StatusesCreate from './components/StatusesCreate';
+import EducationLevelsIndex from './components/EducationLevelsIndex';
+import SubdivisionTypesIndex from './components/SubdivisionTypesIndex';
+import CountriesIndex from './components/CountriesIndex';
 
 const router = new VueRouter({
     mode: 'history',
@@ -58,6 +61,21 @@ const router = new VueRouter({
             name: 'statuses.create',
             component: StatusesCreate
         },
+        {
+            path: '/educationlevels',
+            name: 'educationLevels.index',
+            component: EducationLevelsIndex
+        },
+        {
+            path: '/subdivisiontypes',
+            name: 'subdivisionTypes.index',
+            component: SubdivisionTypesIndex
+        },
+        {
+            path: '/countries',
+            name: 'countries.index',
+            component: CountriesIndex
+        }
     ],
 });
 

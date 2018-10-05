@@ -1,5 +1,5 @@
 <template>
-    <div class="statuses">
+    <div class="countries">
         <div class="loading" v-if="loading">
             Loading...
         </div>
@@ -8,16 +8,16 @@
             {{ error }}
         </div>
 
-        <div v-if="statuses">
+        <div v-if="countries">
             <b-table :sort-by.sync="sortBy"
                      :sort-desc.sync="sortDesc"
-                     :items="statuses"
+                     :items="countries"
                      :fields="fields">
                 <template slot="actions" slot-scope="row">
-                    <b-button size="sm" @click.stop="editStatus(row.item.id)" class="mr-1">
+                    <b-button size="sm" @click.stop="editCountry(row.item.id)" class="mr-1">
                         Edit
                     </b-button>
-                    <b-button size="sm" @click.stop="deleteStatus(row.item.id)" class="mr-1">
+                    <b-button size="sm" @click.stop="deleteCountry(row.item.id)" class="mr-1">
                         Delete
                     </b-button>
                 </template>
@@ -28,17 +28,17 @@
             </p>
         </div>
 
-        <b-btn v-b-modal.modalPrevent>Add Status</b-btn>
+        <b-btn v-b-modal.modalPrevent>Add Country</b-btn>
 
         <b-modal id="modalPrevent"
                  ref="modal"
-                 title="Add a new Status"
+                 title="Add a new Country"
                  @ok="handleOk"
                  @shown="clearForm">
             <form @submit.stop.prevent="saveForm">
                 <b-form-input type="text"
-                              placeholder="Status"
-                              v-model="status.name"></b-form-input>
+                              placeholder="Country"
+                              v-model="country.name"></b-form-input>
             </form>
         </b-modal>
 
@@ -50,8 +50,8 @@
         data() {
             return {
                 loading: false,
-                statuses: null,
-                status: {
+                countries: null,
+                country: {
                     name: ''
                 },
                 error: null
@@ -62,17 +62,17 @@
         },
         methods: {
             fetchData() {
-                this.error = this.statuses = null;
+                this.error = this.countries = null;
                 this.loading = true;
                 axios
-                    .get('/api/statuses', {
+                    .get('/api/countries', {
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         }
                     })
                     .then(response => {
                         this.loading = false;
-                        this.statuses = response.data;
+                        this.countries = response.data;
                         this.fields = [
                             { key: 'name', sortable: true },
                             { key: 'actions', sortable: false }
@@ -81,17 +81,17 @@
                         this.sortDesc = false;
                     });
             },
-            editStatus(id) {
+            editCountry(id) {
                 console.log("EDIT ID " + id);
             },
-            deleteStatus(id) {
-                axios.delete('/api/status/' + id)
+            deleteCountry(id) {
+                axios.delete('/api/country/' + id)
                     .then(function (resp) {
-                        window.location.replace('/statuses');
+                        window.location.replace('/countries');
                     })
                     .catch(function (resp) {
                         console.log(resp);
-                        alert("Could not delete your status");
+                        alert("Could not delete country");
                     });
             },
 
@@ -102,16 +102,16 @@
             handleOk (evt) {
                 // Prevent modal from closing
                 evt.preventDefault()
-                if (!this.status.name) {
-                    alert('Please enter your name')
+                if (!this.country.name) {
+                    alert('Please enter country name')
                 } else {
                     this.saveForm()
                 }
             },
             saveForm() {
                 var app = this;
-                var newStatus = app.status;
-                axios.post('/api/status', newStatus)
+                var newCountry = app.country;
+                axios.post('/api/country', newCountry)
                     .then(function (resp) {
                         app.clearForm()
                         app.$refs.modal.hide()
@@ -119,7 +119,7 @@
                     })
                     .catch(function (resp) {
                         console.log(resp);
-                        alert("Could not create your status");
+                        alert("Could not create country");
                     });
             }
         }

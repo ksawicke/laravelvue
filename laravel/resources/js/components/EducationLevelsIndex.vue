@@ -1,5 +1,5 @@
 <template>
-    <div class="statuses">
+    <div class="educationLevels">
         <div class="loading" v-if="loading">
             Loading...
         </div>
@@ -8,16 +8,16 @@
             {{ error }}
         </div>
 
-        <div v-if="statuses">
+        <div v-if="educationLevels">
             <b-table :sort-by.sync="sortBy"
                      :sort-desc.sync="sortDesc"
-                     :items="statuses"
+                     :items="educationLevels"
                      :fields="fields">
                 <template slot="actions" slot-scope="row">
-                    <b-button size="sm" @click.stop="editStatus(row.item.id)" class="mr-1">
+                    <b-button size="sm" @click.stop="editEducationLevels(row.item.id)" class="mr-1">
                         Edit
                     </b-button>
-                    <b-button size="sm" @click.stop="deleteStatus(row.item.id)" class="mr-1">
+                    <b-button size="sm" @click.stop="deleteEducationLevels(row.item.id)" class="mr-1">
                         Delete
                     </b-button>
                 </template>
@@ -28,17 +28,17 @@
             </p>
         </div>
 
-        <b-btn v-b-modal.modalPrevent>Add Status</b-btn>
+        <b-btn v-b-modal.modalPrevent>Add Education Level</b-btn>
 
         <b-modal id="modalPrevent"
                  ref="modal"
-                 title="Add a new Status"
+                 title="Add a new Education Level"
                  @ok="handleOk"
                  @shown="clearForm">
             <form @submit.stop.prevent="saveForm">
                 <b-form-input type="text"
-                              placeholder="Status"
-                              v-model="status.name"></b-form-input>
+                              placeholder="Education Level"
+                              v-model="educationLevel.description"></b-form-input>
             </form>
         </b-modal>
 
@@ -50,9 +50,9 @@
         data() {
             return {
                 loading: false,
-                statuses: null,
-                status: {
-                    name: ''
+                educationLevels: null,
+                educationLevel: {
+                    description: ''
                 },
                 error: null
             };
@@ -62,56 +62,56 @@
         },
         methods: {
             fetchData() {
-                this.error = this.statuses = null;
+                this.error = this.educationLevels = null;
                 this.loading = true;
                 axios
-                    .get('/api/statuses', {
+                    .get('/api/educationlevels', {
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         }
                     })
                     .then(response => {
                         this.loading = false;
-                        this.statuses = response.data;
+                        this.educationLevels = response.data;
                         this.fields = [
-                            { key: 'name', sortable: true },
+                            { key: 'description', sortable: true },
                             { key: 'actions', sortable: false }
                         ];
-                        this.sortBy = 'name';
+                        this.sortBy = 'description';
                         this.sortDesc = false;
                     });
             },
-            editStatus(id) {
+            editEducationLevel(id) {
                 console.log("EDIT ID " + id);
             },
-            deleteStatus(id) {
-                axios.delete('/api/status/' + id)
+            deleteEducationLevel(id) {
+                axios.delete('/api/educationlevel/' + id)
                     .then(function (resp) {
-                        window.location.replace('/statuses');
+                        window.location.replace('/educationlevels');
                     })
                     .catch(function (resp) {
                         console.log(resp);
-                        alert("Could not delete your status");
+                        alert("Could not delete education level");
                     });
             },
 
             /// Modal
             clearForm () {
-                this.name = ''
+                this.description = ''
             },
             handleOk (evt) {
                 // Prevent modal from closing
                 evt.preventDefault()
-                if (!this.status.name) {
-                    alert('Please enter your name')
+                if (!this.educationLevel.description) {
+                    alert('Please enter description')
                 } else {
                     this.saveForm()
                 }
             },
             saveForm() {
                 var app = this;
-                var newStatus = app.status;
-                axios.post('/api/status', newStatus)
+                var newEducationLevel = app.educationLevel;
+                axios.post('/api/educationlevel', newEducationLevel)
                     .then(function (resp) {
                         app.clearForm()
                         app.$refs.modal.hide()
@@ -119,7 +119,7 @@
                     })
                     .catch(function (resp) {
                         console.log(resp);
-                        alert("Could not create your status");
+                        alert("Could not create education level");
                     });
             }
         }

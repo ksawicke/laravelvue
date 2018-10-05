@@ -1,5 +1,5 @@
 <template>
-    <div class="statuses">
+    <div class="subdivisionTypes">
         <div class="loading" v-if="loading">
             Loading...
         </div>
@@ -8,16 +8,16 @@
             {{ error }}
         </div>
 
-        <div v-if="statuses">
+        <div v-if="subdivisionTypes">
             <b-table :sort-by.sync="sortBy"
                      :sort-desc.sync="sortDesc"
-                     :items="statuses"
+                     :items="subdivisionTypes"
                      :fields="fields">
                 <template slot="actions" slot-scope="row">
-                    <b-button size="sm" @click.stop="editStatus(row.item.id)" class="mr-1">
+                    <b-button size="sm" @click.stop="editSubdivisionType(row.item.id)" class="mr-1">
                         Edit
                     </b-button>
-                    <b-button size="sm" @click.stop="deleteStatus(row.item.id)" class="mr-1">
+                    <b-button size="sm" @click.stop="deleteSubdivisionType(row.item.id)" class="mr-1">
                         Delete
                     </b-button>
                 </template>
@@ -28,17 +28,17 @@
             </p>
         </div>
 
-        <b-btn v-b-modal.modalPrevent>Add Status</b-btn>
+        <b-btn v-b-modal.modalPrevent>Add Subdivision Type</b-btn>
 
         <b-modal id="modalPrevent"
                  ref="modal"
-                 title="Add a new Status"
+                 title="Add a new Subdivision Type"
                  @ok="handleOk"
                  @shown="clearForm">
             <form @submit.stop.prevent="saveForm">
                 <b-form-input type="text"
-                              placeholder="Status"
-                              v-model="status.name"></b-form-input>
+                              placeholder="Subdivsion Type"
+                              v-model="subdivisionType.name"></b-form-input>
             </form>
         </b-modal>
 
@@ -50,8 +50,8 @@
         data() {
             return {
                 loading: false,
-                statuses: null,
-                status: {
+                subdivisionTypes: null,
+                subdivisionType: {
                     name: ''
                 },
                 error: null
@@ -62,17 +62,17 @@
         },
         methods: {
             fetchData() {
-                this.error = this.statuses = null;
+                this.error = this.subdivisionTypes = null;
                 this.loading = true;
                 axios
-                    .get('/api/statuses', {
+                    .get('/api/subdivisiontypes', {
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         }
                     })
                     .then(response => {
                         this.loading = false;
-                        this.statuses = response.data;
+                        this.subdivisionTypes = response.data;
                         this.fields = [
                             { key: 'name', sortable: true },
                             { key: 'actions', sortable: false }
@@ -81,17 +81,17 @@
                         this.sortDesc = false;
                     });
             },
-            editStatus(id) {
+            editSubdivisionType(id) {
                 console.log("EDIT ID " + id);
             },
-            deleteStatus(id) {
-                axios.delete('/api/status/' + id)
+            deleteSubdivisionType(id) {
+                axios.delete('/api/subdivisiontype/' + id)
                     .then(function (resp) {
-                        window.location.replace('/statuses');
+                        window.location.replace('/subdivisiontypes');
                     })
                     .catch(function (resp) {
                         console.log(resp);
-                        alert("Could not delete your status");
+                        alert("Could not delete subdivision type");
                     });
             },
 
@@ -102,16 +102,16 @@
             handleOk (evt) {
                 // Prevent modal from closing
                 evt.preventDefault()
-                if (!this.status.name) {
-                    alert('Please enter your name')
+                if (!this.subdivisionType.name) {
+                    alert('Please enter subdivison type')
                 } else {
                     this.saveForm()
                 }
             },
             saveForm() {
                 var app = this;
-                var newStatus = app.status;
-                axios.post('/api/status', newStatus)
+                var newSubdivisionType = app.subdivisionType;
+                axios.post('/api/subdivisiontype', newSubdivisionType)
                     .then(function (resp) {
                         app.clearForm()
                         app.$refs.modal.hide()
@@ -119,7 +119,7 @@
                     })
                     .catch(function (resp) {
                         console.log(resp);
-                        alert("Could not create your status");
+                        alert("Could not create subdivison type");
                     });
             }
         }
