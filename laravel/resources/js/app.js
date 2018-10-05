@@ -10,9 +10,12 @@ require('./bootstrap');
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
+import { Card, Table } from 'bootstrap-vue/es/components';
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
+Vue.use(Card);
+Vue.use(Table);
 
 import App from './components/App'
 import Hello from './components/Hello'

@@ -20240,20 +20240,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_bootstrap_vue__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(217);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_App__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Hello__ = __webpack_require__(220);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Hello___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Hello__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Home__ = __webpack_require__(222);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Home___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Home__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_UsersIndex__ = __webpack_require__(224);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_UsersIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_UsersIndex__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_CompaniesIndex__ = __webpack_require__(227);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_CompaniesIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_CompaniesIndex__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_StatusesIndex__ = __webpack_require__(230);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_StatusesIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_StatusesIndex__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_StatusesCreate__ = __webpack_require__(233);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_StatusesCreate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_StatusesCreate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_bootstrap_vue_es_components__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_App__ = __webpack_require__(217);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_App___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_App__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Hello__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Hello___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Hello__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Home__ = __webpack_require__(222);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Home___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_Home__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_UsersIndex__ = __webpack_require__(224);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_UsersIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_UsersIndex__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_CompaniesIndex__ = __webpack_require__(227);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_CompaniesIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_CompaniesIndex__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_StatusesIndex__ = __webpack_require__(230);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_StatusesIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_StatusesIndex__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_StatusesCreate__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_StatusesCreate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_StatusesCreate__);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -20267,8 +20268,11 @@ __webpack_require__(77);
 
 
 
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_bootstrap_vue__["a" /* default */]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_bootstrap_vue_es_components__["Card"]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_bootstrap_vue_es_components__["Table"]);
 
 
 
@@ -20283,33 +20287,33 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
     routes: [{
         path: '/',
         name: 'home',
-        component: __WEBPACK_IMPORTED_MODULE_5__components_Home___default.a
+        component: __WEBPACK_IMPORTED_MODULE_6__components_Home___default.a
     }, {
         path: '/hello',
         name: 'hello',
-        component: __WEBPACK_IMPORTED_MODULE_4__components_Hello___default.a
+        component: __WEBPACK_IMPORTED_MODULE_5__components_Hello___default.a
     }, {
         path: '/users',
         name: 'users.index',
-        component: __WEBPACK_IMPORTED_MODULE_6__components_UsersIndex___default.a
+        component: __WEBPACK_IMPORTED_MODULE_7__components_UsersIndex___default.a
     }, {
         path: '/companies',
         name: 'companies.index',
-        component: __WEBPACK_IMPORTED_MODULE_7__components_CompaniesIndex___default.a
+        component: __WEBPACK_IMPORTED_MODULE_8__components_CompaniesIndex___default.a
     }, {
         path: '/statuses',
         name: 'statuses.index',
-        component: __WEBPACK_IMPORTED_MODULE_8__components_StatusesIndex___default.a
+        component: __WEBPACK_IMPORTED_MODULE_9__components_StatusesIndex___default.a
     }, {
         path: '/statuses/create',
         name: 'statuses.create',
-        component: __WEBPACK_IMPORTED_MODULE_9__components_StatusesCreate___default.a
+        component: __WEBPACK_IMPORTED_MODULE_10__components_StatusesCreate___default.a
     }]
 });
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#app',
-    components: { App: __WEBPACK_IMPORTED_MODULE_3__components_App___default.a },
+    components: { App: __WEBPACK_IMPORTED_MODULE_4__components_App___default.a },
     router: router
 });
 
@@ -67859,6 +67863,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -67889,7 +67913,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 _this.loading = false;
                 _this.statuses = response.data;
+
+                console.log(_this.statuses);
+
+                _this.fields = [{ key: 'name', sortable: true }, { key: 'actions', sortable: false }];
+                _this.sortBy = 'name';
+                _this.sortDesc = false;
             });
+        },
+        editStatus: function editStatus(id) {
+            console.log("EDIT ID " + id);
+        },
+        deleteStatus: function deleteStatus(id) {
+            console.log("DELETE ID " + id);
         },
 
 
@@ -67955,6 +67991,86 @@ var render = function() {
                 _vm._v(" " + _vm._s(name) + "\n        ")
               ])
             })
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.statuses
+        ? _c(
+            "div",
+            [
+              _c("b-table", {
+                attrs: {
+                  "sort-by": _vm.sortBy,
+                  "sort-desc": _vm.sortDesc,
+                  items: _vm.statuses,
+                  fields: _vm.fields
+                },
+                on: {
+                  "update:sortBy": function($event) {
+                    _vm.sortBy = $event
+                  },
+                  "update:sortDesc": function($event) {
+                    _vm.sortDesc = $event
+                  }
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "actions",
+                    fn: function(row) {
+                      return [
+                        _c(
+                          "b-button",
+                          {
+                            staticClass: "mr-1",
+                            attrs: { size: "sm" },
+                            on: {
+                              click: function($event) {
+                                $event.stopPropagation()
+                                _vm.editStatus(row.item.id)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Edit\n                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-button",
+                          {
+                            staticClass: "mr-1",
+                            attrs: { size: "sm" },
+                            on: {
+                              click: function($event) {
+                                $event.stopPropagation()
+                                _vm.deleteStatus(row.item.id)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Delete\n                "
+                            )
+                          ]
+                        )
+                      ]
+                    }
+                  }
+                ])
+              }),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v("\n            Sorting By: "),
+                _c("b", [_vm._v(_vm._s(_vm.sortBy))]),
+                _vm._v(",\n            Sort Direction: "),
+                _c("b", [
+                  _vm._v(_vm._s(_vm.sortDesc ? "Descending" : "Ascending"))
+                ])
+              ])
+            ],
+            1
           )
         : _vm._e(),
       _vm._v(" "),

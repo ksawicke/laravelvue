@@ -14,6 +14,26 @@
             </li>
         </ul>
 
+        <div v-if="statuses">
+            <b-table :sort-by.sync="sortBy"
+                     :sort-desc.sync="sortDesc"
+                     :items="statuses"
+                     :fields="fields">
+                <template slot="actions" slot-scope="row">
+                    <b-button size="sm" @click.stop="editStatus(row.item.id)" class="mr-1">
+                        Edit
+                    </b-button>
+                    <b-button size="sm" @click.stop="deleteStatus(row.item.id)" class="mr-1">
+                        Delete
+                    </b-button>
+                </template>
+            </b-table>
+            <p>
+                Sorting By: <b>{{ sortBy }}</b>,
+                Sort Direction: <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
+            </p>
+        </div>
+
         <b-btn v-b-modal.modalPrevent>Add Status</b-btn>
 
         <b-modal id="modalPrevent"
@@ -40,7 +60,7 @@
                 status: {
                     name: ''
                 },
-                error: null,
+                error: null
             };
         },
         created() {
@@ -59,7 +79,22 @@
                     .then(response => {
                         this.loading = false;
                         this.statuses = response.data;
+
+                        console.log(this.statuses)
+
+                        this.fields = [
+                            { key: 'name', sortable: true },
+                            { key: 'actions', sortable: false }
+                        ];
+                        this.sortBy = 'name';
+                        this.sortDesc = false;
                     });
+            },
+            editStatus(id) {
+                console.log("EDIT ID " + id);
+            },
+            deleteStatus(id) {
+                console.log("DELETE ID " + id);
             },
 
             /// Modal
