@@ -16,7 +16,8 @@ class CreateCountriesTable extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->increments('id');
             $table->text('name');
-            $table->integer('country_subdivision_type_id')->unsigned();
+            $table->text('abbreviation');
+            $table->integer('country_subdivision_types_id')->unsigned();
             $table->timestamps();
         });
     }

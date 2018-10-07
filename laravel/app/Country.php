@@ -12,10 +12,14 @@ class Country extends Model
     ];
 
     public function jobs() {
-        return $this->hasMany(Job::class);
+        return $this->hasMany('App\Job');
+    }
+
+    public function countrySubdivisionTypes() {
+        return $this->belongsTo('App\CountrySubdivisionType');
     }
 
     public function countrySubdivisionItems() {
-        return $this->hasMany(CountrySubdivisionItem::class);
+        return $this->hasMany('App\CountrySubdivisionItem');
     }
 }

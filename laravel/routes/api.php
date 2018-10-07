@@ -130,7 +130,8 @@ Route::post('/subdivisiontype', function(Request $request) {
 
 // COUNTRY
 Route::get('/countries', function() {
-    return App\Country::all();
+//    return App\Country::all();
+    return App\Country::with('countrySubdivisionTypes')->with('countrySubdivisionItems')->get();
 });
 
 Route::post('/country', function(Request $request) {

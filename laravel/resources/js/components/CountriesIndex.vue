@@ -39,6 +39,9 @@
                 <b-form-input type="text"
                               placeholder="Country"
                               v-model="country.name"></b-form-input>
+                <b-form-select v-model="subdivisiontype"
+                               :options="options"
+                               class="mb-3"></b-form-select>
             </form>
         </b-modal>
 
@@ -54,6 +57,7 @@
                 country: {
                     name: ''
                 },
+                subdivisionTypes: null,
                 error: null
             };
         },
@@ -97,7 +101,7 @@
 
             /// Modal
             clearForm () {
-                this.name = ''
+                this.country.name = ''
             },
             handleOk (evt) {
                 // Prevent modal from closing
