@@ -1,59 +1,66 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ config('app.locale') }}">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name') }}</title>
+    <title>Laravel - CoreUI Example</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script>
+        window.Laravel = {!! json_encode([
+			'csrfToken' => csrf_token(),
+		]) !!};
+    </script>
+
+    <!-- BODY options, add following classes to body to change options
+    // Header options
+    1. '.header-fixed'					- Fixed Header
+    // Sidebar options
+    1. '.sidebar-fixed'					- Fixed Sidebar
+    2. '.sidebar-hidden'				- Hidden Sidebar
+    3. '.sidebar-off-canvas'		- Off Canvas Sidebar
+    4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
+    // Aside options
+    1. '.aside-menu-fixed'			- Fixed Aside Menu
+    2. '.aside-menu-hidden'			- Hidden Aside Menu
+    3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
+    // Footer options
+    1. '.footer-fixed'						- Fixed footer
+    -->
 </head>
-<body>
-<div id="app">
-    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <strong>C A R E E R S</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav mr-auto">
+@include('panel.navbar')
 
-                </ul>
+<div class="app-body">
+@include('panel.sidebar')
+<!-- Main content -->
+    <main class="main">
 
-                <!-- Right Side Of Navbar -->
-                <?php /****
-                <ul class="navbar-nav ml-auto">
-                    <!-- Authentication Links -->
-                        <li class="nav-item">
-                            <a href="#">Login</a>&nbsp;&nbsp;&nbsp;
-                        </li>
-                        <li class="nav-item">
-                            <a href="#">Register</a>
-                        </li>
-                </ul> ****/ ?>
-            </div>
+        <!-- Breadcrumb -->
+    @include('panel.breadcrumb')
+
+        <div id="app">
+            <app></app>
         </div>
-    </nav>
 
-    <main class="py-4">
-        <app></app>
+    <!-- /.container-fluid -->
     </main>
+
+    @include('panel.asidemenu')
+
 </div>
+
+@include('panel.footer')
+
+@include('panel.scripts')
+<?php /***@yield('myscript')***/ ?>
+
+
 <script src="{{ mix('js/app.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
 </body>
 </html>

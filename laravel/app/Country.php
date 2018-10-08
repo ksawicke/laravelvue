@@ -8,7 +8,7 @@ class Country extends Model
 {
     protected $fillable = [
         'name',
-        'country_subdivision_type_id'
+        'country_subdivision_types_id'
     ];
 
     public function jobs() {
@@ -16,10 +16,10 @@ class Country extends Model
     }
 
     public function countrySubdivisionTypes() {
-        return $this->belongsTo('App\CountrySubdivisionType');
+        return $this->belongsTo('App\CountrySubdivisionType')->orderBy('name', 'ASC');
     }
 
     public function countrySubdivisionItems() {
-        return $this->hasMany('App\CountrySubdivisionItem');
+        return $this->hasMany('App\CountrySubdivisionItem')->orderBy('name', 'ASC');
     }
 }

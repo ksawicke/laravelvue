@@ -8,10 +8,11 @@ class CountrySubdivisionItem extends Model
 {
     protected $fillable = [
         'country_id',
-        'name'
+        'name',
+        'abbreviation'
     ];
 
     public function country() {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo('App\Country');
     }
 }

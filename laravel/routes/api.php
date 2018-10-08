@@ -25,6 +25,51 @@ Route::get('/companies', function() {
     return App\Company::all();
 });
 
+Route::delete('/company/{id}', function($id) {
+    try {
+
+        App\Company::destroy($id);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Deleted company successfully!",
+            'data' => [
+                'id' => $id
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
+Route::post('/company', function(Request $request) {
+    try {
+        $company = App\Company::create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => "Created company successfully!",
+            'data' => [
+                'status' => $company
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
 Route::get('/statuses', function() {
     return App\Status::all();
 });
@@ -128,14 +173,39 @@ Route::post('/subdivisiontype', function(Request $request) {
     }
 });
 
+Route::delete('/subdivisiontype/{id}', function($id) {
+    try {
+
+        App\CountrySubdivisionType::destroy($id);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Deleted subdivision type successfully!",
+            'data' => [
+                'id' => $id
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
 // COUNTRY
 Route::get('/countries', function() {
-//    return App\Country::all();
-    return App\Country::with('countrySubdivisionTypes')->with('countrySubdivisionItems')->get();
+    $countries = App\Country::with('countrySubdivisionTypes')->with('countrySubdivisionItems')->get();
+
+    return $countries;
 });
 
 Route::post('/country', function(Request $request) {
     try {
+//        dd($request);
         $country = App\Country::create($request->all());
 
         return response()->json([
@@ -143,6 +213,52 @@ Route::post('/country', function(Request $request) {
             'message' => "Created country successfully!",
             'data' => [
                 'country' => $country
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
+// COUNTRY SUBDIVISION ITEMS
+Route::post('/countrysubdivisionitem', function(Request $request) {
+    try {
+        $subdivisionItem = App\CountrySubdivisionItem::create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => "Created country subdivision item successfully!",
+            'data' => [
+                'subdivisionItem' => $subdivisionItem
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
+Route::delete('/countrysubdivisionitem/{id}', function($id) {
+    try {
+
+        App\CountrySubdivisionItem::destroy($id);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Deleted subdivision item successfully!",
+            'data' => [
+                'id' => $id
             ]
         ], 200);
 

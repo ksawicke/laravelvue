@@ -6,7 +6,19 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+// Commented out by ksawic 10/09/2018 per
+// https://github.com/derekphilipau/laravel-5.5-coreui-vue-separated#step-by-step-clean-install
+// @import '~bootstrap/scss/bootstrap';
+
+// Fonts
+////@import "./node_modules/font-awesome/scss/font-awesome.scss"; // Font Awesome
+//@import "./node_modules/simple-line-icons/scss/simple-line-icons.scss"; // Simple Line Icons
+
+// CoreUI Style
+//@import "style.scss";
+
+// https://packagist.org/packages/coreui/coreui
+@import "/coreui/src/css/coreui.min.css";
 
 html {
     overflow-y:scroll;

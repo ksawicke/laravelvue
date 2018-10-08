@@ -17,7 +17,7 @@ class CountrySubdivisionItemsTable extends Migration
             $table->increments('id');
             $table->integer('country_id')->unsigned();
             $table->text('name');
-            $table->text('abbreviation');
+            $table->text('abbreviation')->nullable();
             $table->timestamps();
         });
     }

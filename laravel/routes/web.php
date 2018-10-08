@@ -20,4 +20,7 @@
 //Route::get('/home', 'HomeController@index')->name('home');
 
 // https://laravel-news.com/using-vue-router-laravel
-Route::get('/{any}', 'SpaController@index')->where('any', '.*');
+Route::get('/{any}', 'SpaController@index')->where('any', '[\/\w\.-]*');
+//Route::get('/{vue_capture?}', function () {
+//    return view('coreui');
+//})->where('vue_capture', '[\/\w\.-]*');

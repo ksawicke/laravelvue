@@ -17,10 +17,10 @@ class Company extends Model
     ];
 
     public function jobs() {
-        return $this->hasMany(Job::class);
+        return $this->hasMany('App\Job');
     }
 
     public function locations() {
-        return $this->hasMany(CompanyLocation::class);
+        return $this->hasMany('App\CompanyLocation');
     }
 }

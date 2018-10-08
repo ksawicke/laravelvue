@@ -4,8 +4,47 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66ca7343889332c2b8ecca11c251430c",
+    "content-hash": "92b76b8708ac089ae8cdca1e566c1d05",
     "packages": [
+        {
+            "name": "coreui/coreui",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coreui/coreui.git",
+                "reference": "7876c07c239b752cf824e5f77e28a8f34364c653"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coreui/coreui/zipball/7876c07c239b752cf824e5f77e28a8f34364c653",
+                "reference": "7876c07c239b752cf824e5f77e28a8f34364c653",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Łukasz Holeczek",
+                    "email": "lukasz@coreui.io"
+                }
+            ],
+            "description": "Open Source UI Kit built on top of Bootstrap 4",
+            "homepage": "https://coreui.io",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "mobile-first",
+                "responsive",
+                "sass",
+                "web"
+            ],
+            "time": "2018-06-22T20:16:21+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -454,16 +493,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "0438455128c0850b5872c7f3c11b7ccdbbfcba3e"
+                "reference": "763b64a43ebb6042e463aab4214d4cc9722147be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/0438455128c0850b5872c7f3c11b7ccdbbfcba3e",
-                "reference": "0438455128c0850b5872c7f3c11b7ccdbbfcba3e",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/763b64a43ebb6042e463aab4214d4cc9722147be",
+                "reference": "763b64a43ebb6042e463aab4214d4cc9722147be",
                 "shasum": ""
             },
             "require": {
@@ -592,7 +631,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-10-02T14:12:00+00:00"
+            "time": "2018-10-04T14:47:20+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -985,6 +1024,65 @@
                 "serialize"
             ],
             "time": "2018-10-02T13:36:53+00:00"
+        },
+        {
+            "name": "orangehill/iseed",
+            "version": "v2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orangehill/iseed.git",
+                "reference": "b166c1c12118b7e553222e374715f60d0f87f604"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orangehill/iseed/zipball/b166c1c12118b7e553222e374715f60d0f87f604",
+                "reference": "b166c1c12118b7e553222e374715f60d0f87f604",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.3.8",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "illuminate/filesystem": "5.x",
+                "laravel/framework": "^5.3.8",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Orangehill\\Iseed\\IseedServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Orangehill\\Iseed": "src/"
+                },
+                "classmap": [
+                    "src/Orangehill/Iseed/Exceptions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Tihomir Opacic",
+                    "email": "tihomir.opacic@orangehilldev.com"
+                }
+            ],
+            "description": "Generate a new Laravel database seed file based on data from the existing database table.",
+            "keywords": [
+                "artisan",
+                "generators",
+                "laravel",
+                "seed"
+            ],
+            "time": "2018-10-01T07:59:18+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2363,22 +2461,22 @@
     "packages-dev": [
         {
             "name": "beyondcode/laravel-dump-server",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beyondcode/laravel-dump-server.git",
-                "reference": "d24b641e9c8db7c33ad6e4db7042bbd352b92ad1"
+                "reference": "8864b9efcb48e0a79e83014dd7f0a5481f5c808f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beyondcode/laravel-dump-server/zipball/d24b641e9c8db7c33ad6e4db7042bbd352b92ad1",
-                "reference": "d24b641e9c8db7c33ad6e4db7042bbd352b92ad1",
+                "url": "https://api.github.com/repos/beyondcode/laravel-dump-server/zipball/8864b9efcb48e0a79e83014dd7f0a5481f5c808f",
+                "reference": "8864b9efcb48e0a79e83014dd7f0a5481f5c808f",
                 "shasum": ""
             },
             "require": {
-                "illuminate/console": "5.6.*|5.7.*",
-                "illuminate/http": "5.6.*|5.7.*",
-                "illuminate/support": "5.6.*|5.7.*",
+                "illuminate/console": "5.6.*|5.7.*|5.8.*",
+                "illuminate/http": "5.6.*|5.7.*|5.8.*",
+                "illuminate/support": "5.6.*|5.7.*|5.8.*",
                 "php": "^7.1",
                 "symfony/var-dumper": "^4.1.1"
             },
@@ -2420,7 +2518,7 @@
                 "beyondcode",
                 "laravel-dump-server"
             ],
-            "time": "2018-08-05T19:09:56+00:00"
+            "time": "2018-10-04T07:22:24+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -3130,16 +3228,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "6.0.7",
+            "version": "6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "865662550c384bc1db7e51d29aeda1c2c161d69a"
+                "reference": "848f78b3309780fef7ec8c4666b7ab4e6b09b22f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/865662550c384bc1db7e51d29aeda1c2c161d69a",
-                "reference": "865662550c384bc1db7e51d29aeda1c2c161d69a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/848f78b3309780fef7ec8c4666b7ab4e6b09b22f",
+                "reference": "848f78b3309780fef7ec8c4666b7ab4e6b09b22f",
                 "shasum": ""
             },
             "require": {
@@ -3189,7 +3287,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-06-01T07:51:50+00:00"
+            "time": "2018-10-04T03:41:23+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3382,16 +3480,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.3.5",
+            "version": "7.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7b331efabbb628c518c408fdfcaf571156775de2"
+                "reference": "f3837fa1e07758057ae06e8ddec6d06ba183f126"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7b331efabbb628c518c408fdfcaf571156775de2",
-                "reference": "7b331efabbb628c518c408fdfcaf571156775de2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f3837fa1e07758057ae06e8ddec6d06ba183f126",
+                "reference": "f3837fa1e07758057ae06e8ddec6d06ba183f126",
                 "shasum": ""
             },
             "require": {
@@ -3416,7 +3514,7 @@
                 "sebastian/exporter": "^3.1",
                 "sebastian/global-state": "^2.0",
                 "sebastian/object-enumerator": "^3.0.3",
-                "sebastian/resource-operations": "^1.0",
+                "sebastian/resource-operations": "^2.0",
                 "sebastian/version": "^2.0.1"
             },
             "conflict": {
@@ -3436,7 +3534,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -3462,7 +3560,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-09-08T15:14:29+00:00"
+            "time": "2018-10-05T04:05:24+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3944,25 +4042,25 @@
         },
         {
             "name": "sebastian/resource-operations",
-            "version": "1.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/resource-operations.git",
-                "reference": "ce990bb21759f94aeafd30209e8cfcdfa8bc3f52"
+                "reference": "4d7a795d35b889bf80a0cc04e08d77cedfa917a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
-                "reference": "ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
+                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/4d7a795d35b889bf80a0cc04e08d77cedfa917a9",
+                "reference": "4d7a795d35b889bf80a0cc04e08d77cedfa917a9",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0"
+                "php": "^7.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -3982,7 +4080,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "time": "2015-07-28T20:34:47+00:00"
+            "time": "2018-10-04T04:07:39+00:00"
         },
         {
             "name": "sebastian/version",
