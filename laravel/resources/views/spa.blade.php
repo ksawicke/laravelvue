@@ -32,7 +32,7 @@
     1. '.footer-fixed'						- Fixed footer
     -->
 </head>
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<body class="app sidebar-lg-show header-fixed sidebar-fixed aside-menu-fixed aside-menu-off-canvas">
 
 @include('panel.navbar')
 
