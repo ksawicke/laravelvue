@@ -25,6 +25,12 @@ Route::get('/companies', function() {
     return App\Company::all();
 });
 
+Route::get('/company/{id}', function($id) {
+    $company = App\Company::find($id);
+
+    return $company;
+});
+
 Route::delete('/company/{id}', function($id) {
     try {
 
@@ -70,6 +76,36 @@ Route::post('/company', function(Request $request) {
     }
 });
 
+Route::patch('/company/{id}', function($id, Request $request) {
+    try {
+        $company = App\Company::findOrFail($id);
+        $company->name = $request->name;
+        $company->website = $request->website;
+        $company->phone = $request->phone;
+        $company->social_linked_in = $request->linked_in;
+        $company->social_twitter = $request->twitter;
+        $company->social_facebook = $request->facebook;
+        $company->about = $request->about;
+        $company->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Edited company successfully!",
+            'data' => [
+                'country' => $company
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
 Route::delete('/country/{id}', function($id) {
     try {
 
@@ -95,6 +131,12 @@ Route::delete('/country/{id}', function($id) {
 
 Route::get('/statuses', function() {
     return App\Status::all();
+});
+
+Route::get('/status/{id}', function($id) {
+    $status = App\Status::find($id);
+
+    return $status;
 });
 
 Route::delete('/status/{id}', function($id) {
@@ -147,6 +189,35 @@ Route::get('/educationlevels', function() {
     return App\EducationLevel::all();
 });
 
+Route::get('/educationlevel/{id}', function($id) {
+    $educationLevel = App\Educationlevel::find($id);
+
+    return $educationLevel;
+});
+
+Route::delete('/educationlevel/{id}', function($id) {
+    try {
+
+        App\EducationLevel::destroy($id);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Deleted education level successfully!",
+            'data' => [
+                'id' => $id
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
 Route::post('/educationlevel', function(Request $request) {
     try {
         $educationLevel = App\EducationLevel::create($request->all());
@@ -169,9 +240,39 @@ Route::post('/educationlevel', function(Request $request) {
     }
 });
 
+Route::patch('/educationlevel/{id}', function($id, Request $request) {
+    try {
+        $educationLevel = App\EducationLevel::findOrFail($id);
+        $educationLevel->description = $request->description;
+        $educationLevel->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Edited education level successfully!",
+            'data' => [
+                'country' => $educationLevel
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
 // COUNTRY SUBDIVISION TYPES
 Route::get('/subdivisiontypes', function() {
     return App\CountrySubdivisionType::all();
+});
+
+Route::get('/subdivisiontype/{id}', function($id) {
+    $subdivisionType = App\CountrySubdivisionType::find($id);
+
+    return $subdivisionType;
 });
 
 Route::post('/subdivisiontype', function(Request $request) {
@@ -206,6 +307,29 @@ Route::delete('/subdivisiontype/{id}', function($id) {
             'message' => "Deleted subdivision type successfully!",
             'data' => [
                 'id' => $id
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+Route::patch('/subdivisiontype/{id}', function($id, Request $request) {
+    try {
+        $subdivisionType = App\CountrySubdivisionType::findOrFail($id);
+        $subdivisionType->name = $request->name;
+        $subdivisionType->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Edited country subdivision type successfully!",
+            'data' => [
+                'country' => $subdivisionType
             ]
         ], 200);
 

@@ -35,11 +35,11 @@
     1. '.footer-fixed'						- Fixed footer
     -->
 </head>
-<body class="app sidebar-lg-show header-fixed sidebar-fixed aside-menu-fixed aside-menu-off-canvas">
+<body class="app sidebar-show header-fixed aside-menu-hidden aside-menu-off-canvas">
 
 @include('panel.navbar')
 
-<div class="app-body">
+<div class="app-body" id="app">
 @include('panel.sidebar')
 <!-- Main content -->
     <main class="main">
@@ -47,9 +47,7 @@
         <!-- Breadcrumb -->
     @include('panel.breadcrumb')
 
-        <div id="app">
-            <app></app>
-        </div>
+        <app></app>
 
     <!-- /.container-fluid -->
     </main>
