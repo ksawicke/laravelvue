@@ -70,6 +70,29 @@ Route::post('/company', function(Request $request) {
     }
 });
 
+Route::delete('/country/{id}', function($id) {
+    try {
+
+        App\Country::destroy($id);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Deleted country successfully!",
+            'data' => [
+                'id' => $id
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
 Route::get('/statuses', function() {
     return App\Status::all();
 });
@@ -203,14 +226,45 @@ Route::get('/countries', function() {
     return $countries;
 });
 
+Route::get('/country/{id}', function($id) {
+    $countries = App\Country::with('countrySubdivisionTypes')->with('countrySubdivisionItems')->find($id);
+
+    return $countries;
+});
+
 Route::post('/country', function(Request $request) {
     try {
-//        dd($request);
         $country = App\Country::create($request->all());
 
         return response()->json([
             'status' => true,
             'message' => "Created country successfully!",
+            'data' => [
+                'country' => $country
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
+Route::patch('/country/{id}', function($id, Request $request) {
+    try {
+        $country = App\Country::findOrFail($id);
+        $country->name = $request->name;
+        $country->abbreviation = $request->abbreviation;
+        $country->country_subdivision_types_id = $request->country_subdivision_types_id;
+        $country->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Edited country successfully!",
             'data' => [
                 'country' => $country
             ]

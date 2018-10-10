@@ -8,6 +8,7 @@ class Country extends Model
 {
     protected $fillable = [
         'name',
+        'abbreviation',
         'country_subdivision_types_id'
     ];
 

@@ -73164,6 +73164,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -73172,7 +73227,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             loading: false,
             countries: null,
             country: {
-                name: ''
+                name: '',
+                abbreviation: '',
+                country_subdivision_types_id: '',
+                mode: 'add'
             },
             country_subdivision_item: {
                 name: '',
@@ -73180,6 +73238,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 country_id: 0
             },
             subdivisionTypes: [],
+            showAddCountryForm: false,
+            showCountriesTable: true,
+            showAddCountrySubdivisionItemForm: false,
             error: null
         };
     },
@@ -73200,7 +73261,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 _this.loading = false;
                 _this.countries = response.data;
-                _this.fields = [{ key: 'name', sortable: true }, { key: 'actions', sortable: false }];
+                _this.fields = [{ key: 'name', sortable: true }, { key: 'abbreviation', sortable: true }, { key: 'actions', sortable: false }];
                 _this.sortBy = 'name';
                 _this.sortDesc = false;
             });
@@ -73216,8 +73277,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             });
         },
+        addCountryHandle: function addCountryHandle() {
+            this.showAddCountryForm = !this.showAddCountryForm;
+            this.showCountriesTable = !this.showCountriesTable;
+            this.country.id = 0;
+        },
+        addCountrySubdivisionItemHandle: function addCountrySubdivisionItemHandle() {
+            this.showAddCountrySubdivisionItemForm = !this.showAddCountrySubdivisionItemForm;
+            this.showCountriesTable = !this.showCountriesTable;
+            this.country_subdivision_item.country_id = 0;
+        },
         editCountry: function editCountry(id) {
-            console.log("EDIT ID " + id);
+            var _this2 = this;
+
+            this.showAddCountryForm = !this.showAddCountryForm;
+            this.showCountriesTable = !this.showCountriesTable;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/country/' + id, {
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).then(function (response) {
+                _this2.loading = false;
+                _this2.country = response.data;
+            });
         },
         deleteCountry: function deleteCountry(id) {
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/country/' + id).then(function (resp) {
@@ -73254,7 +73337,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.saveCountryForm();
             }
         },
-        countryItemHandleOk: function countryItemHandleOk(evt) {
+        countrySubdivisionItemHandleOk: function countrySubdivisionItemHandleOk(evt) {
             // Prevent modal from closing
             evt.preventDefault();
             if (!this.country_subdivision_item.name && !this.country_subdivision_item.abbreviation) {
@@ -73266,14 +73349,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveCountryForm: function saveCountryForm() {
             var app = this;
             var newCountry = app.country;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/country', newCountry).then(function (resp) {
-                app.clearForm();
-                app.$refs.modal.hide();
-                app.fetchData();
-            }).catch(function (resp) {
-                console.log(resp);
-                alert("Could not create country");
-            });
+            var status = 0;
+            switch (app.country.id) {
+                case 0:
+                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/country', newCountry).then(function (resp) {
+                        switch (resp.status) {
+                            case 200:
+                                app.clearForm();
+                                app.fetchData();
+                                app.addCountryHandle();
+                                break;
+
+                            default:
+                                alert('Unable to save country');
+                                break;
+                        }
+                    });
+                    break;
+
+                default:
+                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.patch('/api/country/' + newCountry.id, newCountry).then(function (resp) {
+                        switch (resp.status) {
+                            case 200:
+                                app.clearForm();
+                                app.fetchData();
+                                app.addCountryHandle();
+                                break;
+
+                            default:
+                                alert('Unable to save country');
+                                break;
+                        }
+                    });
+                    break;
+            }
         },
         saveCountrySubdivisionItemForm: function saveCountrySubdivisionItemForm() {
             var app = this;
@@ -73299,391 +73408,650 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "countries" },
-    [
-      _vm.loading
-        ? _c("div", { staticClass: "loading" }, [
-            _vm._v("\n        Loading...\n    ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.error
-        ? _c("div", { staticClass: "error" }, [
-            _vm._v("\n        " + _vm._s(_vm.error) + "\n    ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.countries
-        ? _c(
-            "div",
-            [
-              _c("b-table", {
-                attrs: {
-                  "sort-by": _vm.sortBy,
-                  "sort-desc": _vm.sortDesc,
-                  items: _vm.countries,
-                  fields: _vm.fields
+  return _c("div", { staticClass: "countries" }, [
+    _vm.loading ? _c("div", { staticClass: "loading" }, [_vm._m(0)]) : _vm._e(),
+    _vm._v(" "),
+    _vm.error
+      ? _c("div", { staticClass: "error" }, [
+          _vm._v("\n        " + _vm._s(_vm.error) + "\n    ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showAddCountryForm,
+            expression: "showAddCountryForm"
+          }
+        ],
+        staticClass: "row"
+      },
+      [
+        _c("div", { staticClass: "col-lg-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("form", [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.country.id,
+                        expression: "country.id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "hidden", placeholder: "" },
+                    domProps: { value: _vm.country.id },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.country, "id", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", [_vm._v("Country")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.country.name,
+                        expression: "country.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Country Name" },
+                    domProps: { value: _vm.country.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.country, "name", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Abbreviation")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.country.abbreviation,
+                        expression: "country.abbreviation"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Abbreviation" },
+                    domProps: { value: _vm.country.abbreviation },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.country,
+                          "abbreviation",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Country Subdivision Type")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.country.country_subdivision_types_id,
+                          expression: "country.country_subdivision_types_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.country,
+                            "country_subdivision_types_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "" } }, [
+                        _vm._v("Please select one:")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.subdivisionTypes, function(subdivisionType) {
+                        return _c(
+                          "option",
+                          { domProps: { value: subdivisionType.value } },
+                          [_vm._v(_vm._s(subdivisionType.text))]
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-primary",
+                  attrs: { type: "submit" },
+                  on: { click: _vm.countryHandleOk }
                 },
-                on: {
-                  "update:sortBy": function($event) {
-                    _vm.sortBy = $event
-                  },
-                  "update:sortDesc": function($event) {
-                    _vm.sortDesc = $event
-                  }
+                [
+                  _c("i", { staticClass: "fa fa-dot-circle-o" }),
+                  _vm._v(" Submit")
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-danger",
+                  attrs: { type: "reset" },
+                  on: { click: _vm.addCountryHandle }
                 },
-                scopedSlots: _vm._u([
-                  {
-                    key: "row-details",
-                    fn: function(row) {
-                      return [
-                        _c(
-                          "b-card",
-                          [
-                            _vm._l(row.item.country_subdivision_items, function(
-                              subitem
-                            ) {
-                              return _c("ul", [
+                [_c("i", { staticClass: "fa fa-backward" }), _vm._v(" Cancel")]
+              )
+            ])
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showAddCountrySubdivisionItemForm,
+            expression: "showAddCountrySubdivisionItemForm"
+          }
+        ],
+        staticClass: "row"
+      },
+      [
+        _c("div", { staticClass: "col-lg-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("form", [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.country_subdivision_item.id,
+                        expression: "country_subdivision_item.id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "hidden", placeholder: "" },
+                    domProps: { value: _vm.country_subdivision_item.id },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.country_subdivision_item,
+                          "id",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", [_vm._v("Country")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.country_subdivision_item.name,
+                        expression: "country_subdivision_item.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      placeholder: "Country Subdivision Item Name"
+                    },
+                    domProps: { value: _vm.country_subdivision_item.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.country_subdivision_item,
+                          "name",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Abbreviation")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.country_subdivision_item.abbreviation,
+                        expression: "country_subdivision_item.abbreviation"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Abbreviation" },
+                    domProps: {
+                      value: _vm.country_subdivision_item.abbreviation
+                    },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.country_subdivision_item,
+                          "abbreviation",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-primary",
+                  attrs: { type: "submit" },
+                  on: { click: _vm.countrySubdivisionItemHandleOk }
+                },
+                [
+                  _c("i", { staticClass: "fa fa-dot-circle-o" }),
+                  _vm._v(" Submit")
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-danger",
+                  attrs: { type: "reset" },
+                  on: { click: _vm.addCountrySubdivisionItemHandle }
+                },
+                [_c("i", { staticClass: "fa fa-backward" }), _vm._v(" Cancel")]
+              )
+            ])
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _vm.countries
+      ? _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.showCountriesTable,
+                expression: "showCountriesTable"
+              }
+            ]
+          },
+          [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-lg-12" }, [
+                _c("div", { staticClass: "card" }, [
+                  _c("div", { staticClass: "card-header" }, [
+                    _c("i", { staticClass: "fa fa-align-justify" }),
+                    _vm._v(" "),
+                    _c("strong", [_vm._v("Countries")]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "badge badge-success",
+                        on: { click: _vm.addCountryHandle }
+                      },
+                      [_vm._v("Add Country")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      _c("b-table", {
+                        attrs: {
+                          "responsive-sm": "",
+                          "sort-by": _vm.sortBy,
+                          "sort-desc": _vm.sortDesc,
+                          items: _vm.countries,
+                          fields: _vm.fields
+                        },
+                        on: {
+                          "update:sortBy": function($event) {
+                            _vm.sortBy = $event
+                          },
+                          "update:sortDesc": function($event) {
+                            _vm.sortDesc = $event
+                          }
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "row-details",
+                            fn: function(row) {
+                              return [
                                 _c(
-                                  "li",
+                                  "b-card",
                                   [
-                                    _vm._v(
-                                      _vm._s(subitem.name) +
-                                        " (" +
-                                        _vm._s(subitem.abbreviation) +
-                                        ")\n                            "
-                                    ),
-                                    _c(
-                                      "b-button",
-                                      {
-                                        staticClass: "mr-1",
-                                        attrs: { size: "sm" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.stopPropagation()
-                                            _vm.editCountrySubdivisionItem(
-                                              subitem.id
-                                            )
-                                          }
+                                    _c("b-table", {
+                                      attrs: {
+                                        "responsive-sm": "",
+                                        striped: "",
+                                        "sort-by": _vm.sortBy,
+                                        "sort-desc": _vm.sortDesc,
+                                        items:
+                                          row.item.country_subdivision_items,
+                                        fields: _vm.fields
+                                      },
+                                      on: {
+                                        "update:sortBy": function($event) {
+                                          _vm.sortBy = $event
+                                        },
+                                        "update:sortDesc": function($event) {
+                                          _vm.sortDesc = $event
                                         }
                                       },
-                                      [
-                                        _vm._v(
-                                          "\n                                Edit\n                            "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "b-button",
-                                      {
-                                        staticClass: "mr-1",
-                                        attrs: { size: "sm" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.stopPropagation()
-                                            _vm.deleteCountrySubdivisionItem(
-                                              subitem.id
-                                            )
+                                      scopedSlots: _vm._u([
+                                        {
+                                          key: "name",
+                                          fn: function(data) {
+                                            return [
+                                              _vm._v(
+                                                "\n                                            " +
+                                                  _vm._s(data.item.name) +
+                                                  "\n                                        "
+                                              )
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          key: "abbreviation",
+                                          fn: function(data) {
+                                            return [
+                                              _vm._v(
+                                                "\n                                            " +
+                                                  _vm._s(
+                                                    data.item.abbreviation
+                                                  ) +
+                                                  "\n                                        "
+                                              )
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          key: "actions",
+                                          fn: function(row) {
+                                            return [
+                                              _c(
+                                                "b-button",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-success",
+                                                  attrs: { size: "sm" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.editCountrySubdivisionItem(
+                                                        _vm.data.item.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                Edit\n                                            "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "b-button",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-danger",
+                                                  attrs: { size: "sm" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.deleteCountrySubdivisionItem(
+                                                        _vm.data.item.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                Delete\n                                            "
+                                                  )
+                                                ]
+                                              )
+                                            ]
                                           }
                                         }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                Delete\n                            "
-                                        )
-                                      ]
-                                    )
+                                      ])
+                                    })
                                   ],
                                   1
                                 )
-                              ])
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "b-button",
-                              {
-                                attrs: { size: "sm" },
-                                on: { click: row.toggleDetails }
-                              },
-                              [_vm._v("Hide Details")]
-                            )
-                          ],
-                          2
-                        )
-                      ]
-                    }
-                  },
-                  {
-                    key: "name",
-                    fn: function(data) {
-                      return [
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(data.item.name) +
-                            " (" +
-                            _vm._s(data.item.abbreviation) +
-                            ")"
-                        ),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c(
-                          "b-btn",
+                              ]
+                            }
+                          },
                           {
-                            directives: [
-                              {
-                                name: "b-modal",
-                                rawName:
-                                  "v-b-modal.modalAddNewCountrySubdivisionItem",
-                                modifiers: {
-                                  modalAddNewCountrySubdivisionItem: true
-                                }
-                              }
-                            ],
-                            on: {
-                              click: function($event) {
-                                _vm.setCountrySubdivisionItemCountryId(
-                                  data.item.id
+                            key: "name",
+                            fn: function(data) {
+                              return [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(data.item.name) +
+                                    "\n                            "
                                 )
-                              }
+                              ]
                             }
                           },
-                          [
-                            _vm._v(
-                              "Add " +
-                                _vm._s(data.item.country_subdivision_types.name)
-                            )
-                          ]
-                        )
-                      ]
-                    }
-                  },
-                  {
-                    key: "actions",
-                    fn: function(row) {
-                      return [
-                        _c(
-                          "b-button",
                           {
-                            staticClass: "mr-2",
-                            attrs: { size: "sm" },
-                            on: {
-                              click: function($event) {
-                                $event.stopPropagation()
-                                return row.toggleDetails($event)
-                              }
+                            key: "abbreviation",
+                            fn: function(data) {
+                              return [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(data.item.abbreviation) +
+                                    "\n                            "
+                                )
+                              ]
                             }
                           },
-                          [
-                            _vm._v(
-                              "\n                    " +
-                                _vm._s(row.detailsShowing ? "Hide" : "Show") +
-                                " Details\n                "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "b-button",
                           {
-                            staticClass: "mr-1",
-                            attrs: { size: "sm" },
-                            on: {
-                              click: function($event) {
-                                $event.stopPropagation()
-                                _vm.editCountry(row.item.id)
-                              }
+                            key: "actions",
+                            fn: function(row) {
+                              return [
+                                _c(
+                                  "b-button",
+                                  {
+                                    staticClass: "badge badge-success",
+                                    attrs: { size: "sm" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation()
+                                        return row.toggleDetails($event)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(
+                                          row.detailsShowing ? " - " : " + "
+                                        ) +
+                                        "\n                                "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-button",
+                                  {
+                                    staticClass: "badge badge-success",
+                                    attrs: { size: "sm" },
+                                    on: {
+                                      click: _vm.addCountrySubdivisionItemHandle
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "Add " +
+                                        _vm._s(
+                                          row.item.country_subdivision_types
+                                            .name
+                                        )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-button",
+                                  {
+                                    staticClass: "badge badge-success",
+                                    attrs: { size: "sm" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation()
+                                        _vm.editCountry(row.item.id)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Edit\n                                "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-button",
+                                  {
+                                    staticClass: "badge badge-danger",
+                                    attrs: { size: "sm" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation()
+                                        _vm.deleteCountry(row.item.id)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Delete\n                                "
+                                    )
+                                  ]
+                                )
+                              ]
                             }
-                          },
-                          [
-                            _vm._v(
-                              "\n                    Edit\n                "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "b-button",
-                          {
-                            staticClass: "mr-1",
-                            attrs: { size: "sm" },
-                            on: {
-                              click: function($event) {
-                                $event.stopPropagation()
-                                _vm.deleteCountry(row.item.id)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                    Delete\n                "
-                            )
-                          ]
-                        )
-                      ]
-                    }
-                  }
-                ])
-              }),
-              _vm._v(" "),
-              _c("p", [
-                _vm._v("\n            Sorting By: "),
-                _c("b", [_vm._v(_vm._s(_vm.sortBy))]),
-                _vm._v(",\n            Sort Direction: "),
-                _c("b", [
-                  _vm._v(_vm._s(_vm.sortDesc ? "Descending" : "Ascending"))
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
                 ])
               ])
-            ],
-            1
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "b-btn",
-        {
-          directives: [
-            {
-              name: "b-modal",
-              rawName: "v-b-modal.modalAddNewCountry",
-              modifiers: { modalAddNewCountry: true }
-            }
+            ])
           ]
-        },
-        [_vm._v("Add Country")]
-      ),
-      _vm._v(" "),
-      _c(
-        "b-modal",
-        {
-          ref: "modal",
-          attrs: { id: "modalAddNewCountry", title: "Add a new Country" },
-          on: { ok: _vm.countryHandleOk, shown: _vm.clearForm }
-        },
-        [
-          _c(
-            "form",
-            {
-              on: {
-                submit: function($event) {
-                  $event.stopPropagation()
-                  $event.preventDefault()
-                  return _vm.saveCountryForm($event)
-                }
-              }
-            },
-            [
-              _c("b-form-input", {
-                attrs: { type: "text", placeholder: "Country" },
-                model: {
-                  value: _vm.country.name,
-                  callback: function($$v) {
-                    _vm.$set(_vm.country, "name", $$v)
-                  },
-                  expression: "country.name"
-                }
-              }),
-              _vm._v(" "),
-              _c("b-form-input", {
-                attrs: { type: "text", placeholder: "Abbreviation" },
-                model: {
-                  value: _vm.country.abbreviation,
-                  callback: function($$v) {
-                    _vm.$set(_vm.country, "abbreviation", $$v)
-                  },
-                  expression: "country.abbreviation"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "b-form-select",
-                {
-                  staticClass: "mb-3",
-                  attrs: {
-                    placeholder: "Country Subdivision Type",
-                    options: _vm.subdivisionTypes
-                  },
-                  model: {
-                    value: _vm.country.country_subdivision_types_id,
-                    callback: function($$v) {
-                      _vm.$set(_vm.country, "country_subdivision_types_id", $$v)
-                    },
-                    expression: "country.country_subdivision_types_id"
-                  }
-                },
-                [
-                  _c("template", { slot: "first" }, [
-                    _c(
-                      "option",
-                      { attrs: { disabled: "" }, domProps: { value: null } },
-                      [_vm._v("-- Please select an option --")]
-                    )
-                  ])
-                ],
-                2
-              )
-            ],
-            1
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "b-modal",
-        {
-          ref: "modal",
-          attrs: {
-            id: "modalAddNewCountrySubdivisionItem",
-            title: "Add a new Country Sub Item"
-          },
-          on: { ok: _vm.countryItemHandleOk, shown: _vm.clearForm }
-        },
-        [
-          _c(
-            "form",
-            {
-              on: {
-                submit: function($event) {
-                  $event.stopPropagation()
-                  $event.preventDefault()
-                  return _vm.saveCountrySubdivisionItemForm($event)
-                }
-              }
-            },
-            [
-              _c("b-form-input", {
-                attrs: { type: "text", placeholder: "Name" },
-                model: {
-                  value: _vm.country_subdivision_item.name,
-                  callback: function($$v) {
-                    _vm.$set(_vm.country_subdivision_item, "name", $$v)
-                  },
-                  expression: "country_subdivision_item.name"
-                }
-              }),
-              _vm._v(" "),
-              _c("b-form-input", {
-                attrs: { type: "text", placeholder: "Abbreviation" },
-                model: {
-                  value: _vm.country_subdivision_item.abbreviation,
-                  callback: function($$v) {
-                    _vm.$set(_vm.country_subdivision_item, "abbreviation", $$v)
-                  },
-                  expression: "country_subdivision_item.abbreviation"
-                }
-              })
-            ],
-            1
-          )
-        ]
-      )
-    ],
-    1
-  )
+        )
+      : _vm._e()
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "fa-2x" }, [
+      _c("i", { staticClass: "fas fa-spinner fa-spin" }),
+      _vm._v(" Patience is a virtue...\n        ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("strong", [_vm._v("Add a Country")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("strong", [_vm._v("Add a Country Item")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

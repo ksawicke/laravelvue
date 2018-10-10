@@ -1,112 +1,167 @@
 <template>
     <div class="countries">
         <div class="loading" v-if="loading">
-            Loading...
+            <div class="fa-2x">
+                <i class="fas fa-spinner fa-spin"></i> Patience is a virtue...
+            </div>
         </div>
 
         <div v-if="error" class="error">
             {{ error }}
         </div>
 
-        <div v-if="countries">
-            <b-table :sort-by.sync="sortBy"
-                     :sort-desc.sync="sortDesc"
-                     :items="countries"
-                     :fields="fields">
-                <template slot="row-details" slot-scope="row">
-                    <b-card>
-                        <ul v-for="subitem in row.item.country_subdivision_items">
-                            <li>{{ subitem.name }} ({{ subitem.abbreviation }})
-                                <b-button size="sm" @click.stop="editCountrySubdivisionItem(subitem.id)" class="mr-1">
-                                    Edit
-                                </b-button>
-                                <b-button size="sm" @click.stop="deleteCountrySubdivisionItem(subitem.id)" class="mr-1">
-                                    Delete
-                                </b-button>
-                            </li>
-                        </ul>
-                        <!--b-row class="mb-2">
-                            <b-col sm="3" class="text-sm-right"><b>State:</b></b-col>
-                            <b-col>????</b-col>
-                        </b-row>
-                        <b-row class="mb-2">
-                            <b-col sm="3" class="text-sm-right"><b>Is Active:</b></b-col>
-                            <b-col>88888</b-col>
-                        </b-row-->
-                        <!--ul v-if="data.item.country_subdivision_items" v-for="subitem in data.item.country_subdivision_items">
-                        <li>{{ subitem.name }} ({{ subitem.abbreviation }})</li>
-                    </ul-->
-                        <b-button size="sm" @click="row.toggleDetails">Hide Details</b-button>
-                    </b-card>
-                </template>
-                <template slot="name" slot-scope="data">
-                    {{ data.item.name }} ({{ data.item.abbreviation }})<br />
+        <div class="row" v-show="showAddCountryForm">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Add a Country</strong>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" placeholder="" v-model="country.id">
 
-                    <!--ul v-if="data.item.country_subdivision_items" v-for="subitem in data.item.country_subdivision_items">
-                        <li>{{ subitem.name }} ({{ subitem.abbreviation }})</li>
-                    </ul-->
-
-                    <b-btn v-b-modal.modalAddNewCountrySubdivisionItem @click="setCountrySubdivisionItemCountryId(data.item.id)">Add {{ data.item.country_subdivision_types.name }}</b-btn>
-                </template>
-                <template slot="actions" slot-scope="row">
-                    <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
-                        {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
-                    </b-button>
-                    <b-button size="sm" @click.stop="editCountry(row.item.id)" class="mr-1">
-                        Edit
-                    </b-button>
-                    <b-button size="sm" @click.stop="deleteCountry(row.item.id)" class="mr-1">
-                        Delete
-                    </b-button>
-                </template>
-            </b-table>
-            <p>
-                Sorting By: <b>{{ sortBy }}</b>,
-                Sort Direction: <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
-            </p>
+                                <label>Country</label>
+                                <input type="text" class="form-control" placeholder="Country Name" v-model="country.name">
+                                <!--span class="help-block">Please enter your email</span-->
+                            </div>
+                            <div class="form-group">
+                                <label>Abbreviation</label>
+                                <input type="text" class="form-control" placeholder="Abbreviation" v-model="country.abbreviation">
+                                <!--span class="help-block">Please enter your password</span-->
+                            </div>
+                            <div class="form-group">
+                                <label>Country Subdivision Type</label>
+                                <select class="form-control" v-model="country.country_subdivision_types_id">
+                                    <option value="">Please select one:</option>
+                                    <option v-for="subdivisionType in subdivisionTypes" v-bind:value="subdivisionType.value">{{ subdivisionType.text }}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm btn-primary" v-on:click="countryHandleOk"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                        <button type="reset" class="btn btn-sm btn-danger" v-on:click="addCountryHandle"><i class="fa fa-backward"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <b-btn v-b-modal.modalAddNewCountry>Add Country</b-btn>
+        <div class="row" v-show="showAddCountrySubdivisionItemForm">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Add a Country Item</strong>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" placeholder="" v-model="country_subdivision_item.id">
 
-        <b-modal id="modalAddNewCountry"
-                 ref="modal"
-                 title="Add a new Country"
-                 @ok="countryHandleOk"
-                 @shown="clearForm">
-            <form @submit.stop.prevent="saveCountryForm">
-                <b-form-input type="text"
-                              placeholder="Country"
-                              v-model="country.name"></b-form-input>
-                <b-form-input type="text"
-                              placeholder="Abbreviation"
-                              v-model="country.abbreviation"></b-form-input>
-                <b-form-select v-model="country.country_subdivision_types_id"
-                               placeholder="Country Subdivision Type"
-                               :options="subdivisionTypes"
-                               class="mb-3">
-                    <template slot="first">
-                        <!-- this slot appears above the options from 'options' prop -->
-                        <option :value="null" disabled>-- Please select an option --</option>
-                    </template></b-form-select>
-            </form>
-        </b-modal>
+                                <label>Country</label>
+                                <input type="text" class="form-control" placeholder="Country Subdivision Item Name" v-model="country_subdivision_item.name">
+                                <!--span class="help-block">Please enter your email</span-->
+                            </div>
+                            <div class="form-group">
+                                <label>Abbreviation</label>
+                                <input type="text" class="form-control" placeholder="Abbreviation" v-model="country_subdivision_item.abbreviation">
+                                <!--span class="help-block">Please enter your password</span-->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm btn-primary" v-on:click="countrySubdivisionItemHandleOk"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                        <button type="reset" class="btn btn-sm btn-danger" v-on:click="addCountrySubdivisionItemHandle"><i class="fa fa-backward"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <b-modal id="modalAddNewCountrySubdivisionItem"
-                 ref="modal"
-                 title="Add a new Country Sub Item"
-                 @ok="countryItemHandleOk"
-                 @shown="clearForm">
-            <form @submit.stop.prevent="saveCountrySubdivisionItemForm">
-                <!--b-form-input type="text"
-                              v-model="country_subdivision_item.country_id"></b-form-input-->
-                <b-form-input type="text"
-                              placeholder="Name"
-                              v-model="country_subdivision_item.name"></b-form-input>
-                <b-form-input type="text"
-                              placeholder="Abbreviation"
-                              v-model="country_subdivision_item.abbreviation"></b-form-input>
-            </form>
-        </b-modal>
+        <div v-if="countries" v-show="showCountriesTable">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fa fa-align-justify"></i> <strong>Countries</strong> <button class="badge badge-success" v-on:click="addCountryHandle">Add Country</button>
+                        </div>
+                        <div class="card-body">
+
+                            <b-table responsive-sm
+                                     :sort-by.sync="sortBy"
+                                     :sort-desc.sync="sortDesc"
+                                     :items="countries"
+                                     :fields="fields">
+
+                                <template slot="row-details" slot-scope="row">
+                                    <b-card>
+
+                                        <!-->
+
+                                        <b-table responsive-sm striped
+                                                 :sort-by.sync="sortBy"
+                                                 :sort-desc.sync="sortDesc"
+                                                 :items="row.item.country_subdivision_items"
+                                                 :fields="fields">
+                                            <template slot="name" slot-scope="data">
+                                                {{ data.item.name }}
+                                            </template>
+
+                                            <template slot="abbreviation" slot-scope="data">
+                                                {{ data.item.abbreviation }}
+                                            </template>
+
+                                            <template slot="actions" slot-scope="row">
+                                                <b-button size="sm" v-on:click="editCountrySubdivisionItem(data.item.id)" class="badge badge-success">
+                                                    Edit
+                                                </b-button>
+                                                <b-button size="sm" v-on:click="deleteCountrySubdivisionItem(data.item.id)" class="badge badge-danger">
+                                                    Delete
+                                                </b-button>
+                                            </template>
+                                        </b-table>
+
+                                        <!-->
+
+                                        <!--ul v-for="subitem in row.item.country_subdivision_items">
+                                            <li>{{ subitem.name }} ({{ subitem.abbreviation }})
+                                                <b-button size="sm" @click.stop="editCountrySubdivisionItem(subitem.id)" class="mr-1">
+                                                    Edit
+                                                </b-button>
+                                                <b-button size="sm" @click.stop="deleteCountrySubdivisionItem(subitem.id)" class="mr-1">
+                                                    Delete
+                                                </b-button>
+                                            </li>
+                                        </ul-->
+                                    </b-card>
+                                </template>
+
+                                <template slot="name" slot-scope="data">
+                                    {{ data.item.name }}
+                                </template>
+
+                                <template slot="abbreviation" slot-scope="data">
+                                    {{ data.item.abbreviation }}
+                                </template>
+
+                                <template slot="actions" slot-scope="row">
+                                    <b-button size="sm" @click.stop="row.toggleDetails" class="badge badge-success">
+                                        {{ row.detailsShowing ? '&nbsp;-&nbsp;' : '&nbsp;+&nbsp;'}}
+                                    </b-button>
+                                    <b-button size="sm" class="badge badge-success" v-on:click="addCountrySubdivisionItemHandle">Add {{ row.item.country_subdivision_types.name }}</b-button>
+                                    <b-button size="sm" @click.stop="editCountry(row.item.id)" class="badge badge-success">
+                                        Edit
+                                    </b-button>
+                                    <b-button size="sm" @click.stop="deleteCountry(row.item.id)" class="badge badge-danger">
+                                        Delete
+                                    </b-button>
+                                </template>
+
+                            </b-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -118,7 +173,10 @@
                 loading: false,
                 countries: null,
                 country: {
-                    name: ''
+                    name: '',
+                    abbreviation: '',
+                    country_subdivision_types_id: '',
+                    mode: 'add'
                 },
                 country_subdivision_item: {
                     name: '',
@@ -126,6 +184,9 @@
                     country_id: 0
                 },
                 subdivisionTypes: [],
+                showAddCountryForm: false,
+                showCountriesTable: true,
+                showAddCountrySubdivisionItemForm: false,
                 error: null
             };
         },
@@ -147,6 +208,7 @@
                         this.countries = response.data;
                         this.fields = [
                             { key: 'name', sortable: true },
+                            { key: 'abbreviation', sortable: true },
                             { key: 'actions', sortable: false }
                         ];
                         this.sortBy = 'name';
@@ -166,8 +228,30 @@
                         }
                     });
             },
+            addCountryHandle() {
+                this.showAddCountryForm = !this.showAddCountryForm;
+                this.showCountriesTable = !this.showCountriesTable;
+                this.country.id = 0;
+            },
+            addCountrySubdivisionItemHandle() {
+                this.showAddCountrySubdivisionItemForm = !this.showAddCountrySubdivisionItemForm;
+                this.showCountriesTable = !this.showCountriesTable;
+                this.country_subdivision_item.country_id = 0;
+            },
             editCountry(id) {
-                console.log("EDIT ID " + id);
+                this.showAddCountryForm = !this.showAddCountryForm;
+                this.showCountriesTable = !this.showCountriesTable;
+
+                axios
+                    .get('/api/country/' + id, {
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => {
+                        this.loading = false;
+                        this.country = response.data;
+                    });
             },
             deleteCountry(id) {
                 axios.delete('/api/country/' + id)
@@ -207,7 +291,7 @@
                     this.saveCountryForm()
                 }
             },
-            countryItemHandleOk (evt) {
+            countrySubdivisionItemHandleOk (evt) {
                 // Prevent modal from closing
                 evt.preventDefault()
                 if (!this.country_subdivision_item.name &&
@@ -220,16 +304,43 @@
             saveCountryForm() {
                 var app = this;
                 var newCountry = app.country;
-                axios.post('/api/country', newCountry)
-                    .then(function (resp) {
-                        app.clearForm()
-                        app.$refs.modal.hide()
-                        app.fetchData()
-                    })
-                    .catch(function (resp) {
-                        console.log(resp);
-                        alert("Could not create country");
-                    });
+                var status = 0;
+                switch(app.country.id) {
+                    case 0:
+                        axios.post('/api/country', newCountry)
+                            .then(function (resp) {
+                                switch (resp.status) {
+                                    case 200:
+                                        app.clearForm();
+                                        app.fetchData();
+                                        app.addCountryHandle();
+                                        break;
+
+                                    default:
+                                        alert('Unable to save country');
+                                        break;
+                                }
+                            });
+                        break;
+
+                    default:
+                        axios.patch('/api/country/' + newCountry.id, newCountry)
+                            .then(function (resp) {
+                                switch (resp.status) {
+                                    case 200:
+                                        app.clearForm();
+                                        app.fetchData();
+                                        app.addCountryHandle();
+                                        break;
+
+                                    default:
+                                        alert('Unable to save country');
+                                        break;
+                                }
+                            });
+                        break;
+                }
+
             },
             saveCountrySubdivisionItemForm() {
                 var app = this;
