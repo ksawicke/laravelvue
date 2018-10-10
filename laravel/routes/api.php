@@ -303,6 +303,38 @@ Route::post('/countrysubdivisionitem', function(Request $request) {
     }
 });
 
+Route::patch('/countrysubdivisionitem/{id}', function($id, Request $request) {
+    try {
+        $countrySubdivisionItem = App\CountrySubdivisionItem::findOrFail($id);
+        $countrySubdivisionItem->country_id = $request->country_id;
+        $countrySubdivisionItem->name = $request->name;
+        $countrySubdivisionItem->abbreviation = $request->abbreviation;
+        $countrySubdivisionItem->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Edited country subdivision item successfully!",
+            'data' => [
+                'country' => $countrySubdivisionItem
+            ]
+        ], 200);
+
+    } catch (\Exception $ex) {
+
+        return response()->json([
+            'status' => false,
+            'message' => $ex->getMessage()
+        ], 404);
+
+    }
+});
+
+Route::get('/countrysubdivisionitem/{id}', function($id) {
+    $countrySubdivisionItem = App\CountrySubdivisionItem::find($id);
+
+    return $countrySubdivisionItem;
+});
+
 Route::delete('/countrysubdivisionitem/{id}', function($id) {
     try {
 

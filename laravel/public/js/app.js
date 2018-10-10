@@ -73219,6 +73219,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -73282,10 +73284,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.showCountriesTable = !this.showCountriesTable;
             this.country.id = 0;
         },
-        addCountrySubdivisionItemHandle: function addCountrySubdivisionItemHandle() {
+        addCountrySubdivisionItemHandle: function addCountrySubdivisionItemHandle(id) {
             this.showAddCountrySubdivisionItemForm = !this.showAddCountrySubdivisionItemForm;
             this.showCountriesTable = !this.showCountriesTable;
-            this.country_subdivision_item.country_id = 0;
+            this.country_subdivision_item.id = 0;
+            this.country_subdivision_item.country_id = id;
         },
         editCountry: function editCountry(id) {
             var _this2 = this;
@@ -73314,6 +73317,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.country_subdivision_item.country_id = id;
             console.log(this.country_subdivision_item);
         },
+        editCountrySubdivisionItem: function editCountrySubdivisionItem(id) {
+            var _this3 = this;
+
+            this.showAddCountrySubdivisionItemForm = !this.showAddCountrySubdivisionItemForm;
+            this.showCountriesTable = !this.showCountriesTable;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/countrysubdivisionitem/' + id, {
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).then(function (response) {
+                _this3.loading = false;
+                _this3.country_subdivision_item = response.data;
+            });
+        },
         deleteCountrySubdivisionItem: function deleteCountrySubdivisionItem(id) {
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/countrysubdivisionitem/' + id).then(function (resp) {
                 window.location.replace('/countries');
@@ -73328,6 +73346,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         clearForm: function clearForm() {
             this.country.name = '';
         },
+        clearCountrySubdivisionForm: function clearCountrySubdivisionForm() {},
         countryHandleOk: function countryHandleOk(evt) {
             // Prevent modal from closing
             evt.preventDefault();
@@ -73386,16 +73405,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         saveCountrySubdivisionItemForm: function saveCountrySubdivisionItemForm() {
             var app = this;
-            // app.country_subdivision_item.country_id = 1;
             var newCountrySubdivisionItem = app.country_subdivision_item;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/countrysubdivisionitem', newCountrySubdivisionItem).then(function (resp) {
-                app.clearForm();
-                app.$refs.modal.hide();
-                app.fetchData();
-            }).catch(function (resp) {
-                console.log(resp);
-                alert("Could not create country subdivision item");
-            });
+            var status = 0;
+            // console.log(app.country_subdivision_item);
+            // console.log("******");
+
+            switch (app.country_subdivision_item.id) {
+                case 0:
+                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/countrysubdivisionitem', newCountrySubdivisionItem).then(function (resp) {
+                        switch (resp.status) {
+                            case 200:
+                                app.clearCountrySubdivisionForm();
+                                app.fetchData();
+                                app.addCountrySubdivisionItemHandle();
+                                break;
+
+                            default:
+                                alert('Unable to save country subdivision item');
+                                break;
+                        }
+                    });
+                    break;
+
+                default:
+                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.patch('/api/countrysubdivisionitem/' + newCountrySubdivisionItem.id, newCountrySubdivisionItem).then(function (resp) {
+                        switch (resp.status) {
+                            case 200:
+                                app.clearCountrySubdivisionForm();
+                                app.fetchData();
+                                app.addCountrySubdivisionItemHandle();
+                                break;
+
+                            default:
+                                alert('Unable to save country subdivision item');
+                                break;
+                        }
+                    });
+                    break;
+            }
         }
     }
 });
@@ -73573,14 +73620,11 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-sm btn-primary",
+                  staticClass: "btn btn-sm btn-success",
                   attrs: { type: "submit" },
                   on: { click: _vm.countryHandleOk }
                 },
-                [
-                  _c("i", { staticClass: "fa fa-dot-circle-o" }),
-                  _vm._v(" Submit")
-                ]
+                [_c("i", { staticClass: "fa fa-check" }), _vm._v(" Submit")]
               ),
               _vm._v(" "),
               _c(
@@ -73590,7 +73634,7 @@ var render = function() {
                   attrs: { type: "reset" },
                   on: { click: _vm.addCountryHandle }
                 },
-                [_c("i", { staticClass: "fa fa-backward" }), _vm._v(" Cancel")]
+                [_c("i", { staticClass: "fa fa-times" }), _vm._v(" Cancel")]
               )
             ])
           ])
@@ -73645,7 +73689,35 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _c("label", [_vm._v("Country")]),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.country_subdivision_item.country_id,
+                        expression: "country_subdivision_item.country_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "hidden", placeholder: "" },
+                    domProps: {
+                      value: _vm.country_subdivision_item.country_id
+                    },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.country_subdivision_item,
+                          "country_id",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", [_vm._v("Name")]),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -73715,14 +73787,11 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-sm btn-primary",
+                  staticClass: "btn btn-sm btn-success",
                   attrs: { type: "submit" },
                   on: { click: _vm.countrySubdivisionItemHandleOk }
                 },
-                [
-                  _c("i", { staticClass: "fa fa-dot-circle-o" }),
-                  _vm._v(" Submit")
-                ]
+                [_c("i", { staticClass: "fa fa-check" }), _vm._v(" Submit")]
               ),
               _vm._v(" "),
               _c(
@@ -73732,7 +73801,7 @@ var render = function() {
                   attrs: { type: "reset" },
                   on: { click: _vm.addCountrySubdivisionItemHandle }
                 },
-                [_c("i", { staticClass: "fa fa-backward" }), _vm._v(" Cancel")]
+                [_c("i", { staticClass: "fa fa-times" }), _vm._v(" Cancel")]
               )
             ])
           ])
@@ -73858,7 +73927,7 @@ var render = function() {
                                                   on: {
                                                     click: function($event) {
                                                       _vm.editCountrySubdivisionItem(
-                                                        _vm.data.item.id
+                                                        row.item.id
                                                       )
                                                     }
                                                   }
@@ -73879,7 +73948,7 @@ var render = function() {
                                                   on: {
                                                     click: function($event) {
                                                       _vm.deleteCountrySubdivisionItem(
-                                                        _vm.data.item.id
+                                                        row.item.id
                                                       )
                                                     }
                                                   }
@@ -73958,7 +74027,11 @@ var render = function() {
                                     staticClass: "badge badge-success",
                                     attrs: { size: "sm" },
                                     on: {
-                                      click: _vm.addCountrySubdivisionItemHandle
+                                      click: function($event) {
+                                        _vm.addCountrySubdivisionItemHandle(
+                                          row.item.id
+                                        )
+                                      }
                                     }
                                   },
                                   [
@@ -73979,7 +74052,6 @@ var render = function() {
                                     attrs: { size: "sm" },
                                     on: {
                                       click: function($event) {
-                                        $event.stopPropagation()
                                         _vm.editCountry(row.item.id)
                                       }
                                     }
@@ -73998,7 +74070,6 @@ var render = function() {
                                     attrs: { size: "sm" },
                                     on: {
                                       click: function($event) {
-                                        $event.stopPropagation()
                                         _vm.deleteCountry(row.item.id)
                                       }
                                     }

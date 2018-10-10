@@ -40,8 +40,8 @@
                         </form>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-sm btn-primary" v-on:click="countryHandleOk"><i class="fa fa-dot-circle-o"></i> Submit</button>
-                        <button type="reset" class="btn btn-sm btn-danger" v-on:click="addCountryHandle"><i class="fa fa-backward"></i> Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-success" v-on:click="countryHandleOk"><i class="fa fa-check"></i> Submit</button>
+                        <button type="reset" class="btn btn-sm btn-danger" v-on:click="addCountryHandle"><i class="fa fa-times"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -58,7 +58,9 @@
                             <div class="form-group">
                                 <input type="hidden" class="form-control" placeholder="" v-model="country_subdivision_item.id">
 
-                                <label>Country</label>
+                                <input type="hidden" class="form-control" placeholder="" v-model="country_subdivision_item.country_id">
+
+                                <label>Name</label>
                                 <input type="text" class="form-control" placeholder="Country Subdivision Item Name" v-model="country_subdivision_item.name">
                                 <!--span class="help-block">Please enter your email</span-->
                             </div>
@@ -70,8 +72,8 @@
                         </form>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-sm btn-primary" v-on:click="countrySubdivisionItemHandleOk"><i class="fa fa-dot-circle-o"></i> Submit</button>
-                        <button type="reset" class="btn btn-sm btn-danger" v-on:click="addCountrySubdivisionItemHandle"><i class="fa fa-backward"></i> Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-success" v-on:click="countrySubdivisionItemHandleOk"><i class="fa fa-check"></i> Submit</button>
+                        <button type="reset" class="btn btn-sm btn-danger" v-on:click="addCountrySubdivisionItemHandle"><i class="fa fa-times"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -111,10 +113,10 @@
                                             </template>
 
                                             <template slot="actions" slot-scope="row">
-                                                <b-button size="sm" v-on:click="editCountrySubdivisionItem(data.item.id)" class="badge badge-success">
+                                                <b-button size="sm" v-on:click="editCountrySubdivisionItem(row.item.id)" class="badge badge-success">
                                                     Edit
                                                 </b-button>
-                                                <b-button size="sm" v-on:click="deleteCountrySubdivisionItem(data.item.id)" class="badge badge-danger">
+                                                <b-button size="sm" v-on:click="deleteCountrySubdivisionItem(row.item.id)" class="badge badge-danger">
                                                     Delete
                                                 </b-button>
                                             </template>
@@ -147,11 +149,11 @@
                                     <b-button size="sm" @click.stop="row.toggleDetails" class="badge badge-success">
                                         {{ row.detailsShowing ? '&nbsp;-&nbsp;' : '&nbsp;+&nbsp;'}}
                                     </b-button>
-                                    <b-button size="sm" class="badge badge-success" v-on:click="addCountrySubdivisionItemHandle">Add {{ row.item.country_subdivision_types.name }}</b-button>
-                                    <b-button size="sm" @click.stop="editCountry(row.item.id)" class="badge badge-success">
+                                    <b-button size="sm" class="badge badge-success" v-on:click="addCountrySubdivisionItemHandle(row.item.id)">Add {{ row.item.country_subdivision_types.name }}</b-button>
+                                    <b-button size="sm" v-on:click="editCountry(row.item.id)" class="badge badge-success">
                                         Edit
                                     </b-button>
-                                    <b-button size="sm" @click.stop="deleteCountry(row.item.id)" class="badge badge-danger">
+                                    <b-button size="sm" v-on:click="deleteCountry(row.item.id)" class="badge badge-danger">
                                         Delete
                                     </b-button>
                                 </template>
@@ -233,10 +235,11 @@
                 this.showCountriesTable = !this.showCountriesTable;
                 this.country.id = 0;
             },
-            addCountrySubdivisionItemHandle() {
+            addCountrySubdivisionItemHandle(id) {
                 this.showAddCountrySubdivisionItemForm = !this.showAddCountrySubdivisionItemForm;
                 this.showCountriesTable = !this.showCountriesTable;
-                this.country_subdivision_item.country_id = 0;
+                this.country_subdivision_item.id = 0;
+                this.country_subdivision_item.country_id = id;
             },
             editCountry(id) {
                 this.showAddCountryForm = !this.showAddCountryForm;
@@ -267,6 +270,21 @@
                 this.country_subdivision_item.country_id = id;
                 console.log(this.country_subdivision_item)
             },
+            editCountrySubdivisionItem(id) {
+                this.showAddCountrySubdivisionItemForm = !this.showAddCountrySubdivisionItemForm;
+                this.showCountriesTable = !this.showCountriesTable;
+
+                axios
+                    .get('/api/countrysubdivisionitem/' + id, {
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => {
+                        this.loading = false;
+                        this.country_subdivision_item = response.data;
+                    });
+            },
             deleteCountrySubdivisionItem(id) {
                 axios.delete('/api/countrysubdivisionitem/' + id)
                     .then(function (resp) {
@@ -281,6 +299,9 @@
             /// Modal
             clearForm () {
                 this.country.name = ''
+            },
+            clearCountrySubdivisionForm () {
+
             },
             countryHandleOk (evt) {
                 // Prevent modal from closing
@@ -344,18 +365,46 @@
             },
             saveCountrySubdivisionItemForm() {
                 var app = this;
-                // app.country_subdivision_item.country_id = 1;
                 var newCountrySubdivisionItem = app.country_subdivision_item;
-                axios.post('/api/countrysubdivisionitem', newCountrySubdivisionItem)
-                    .then(function (resp) {
-                        app.clearForm()
-                        app.$refs.modal.hide()
-                        app.fetchData()
-                    })
-                    .catch(function (resp) {
-                        console.log(resp);
-                        alert("Could not create country subdivision item");
-                    });
+                var status = 0;
+                // console.log(app.country_subdivision_item);
+                // console.log("******");
+
+                switch(app.country_subdivision_item.id) {
+                    case 0:
+                        axios.post('/api/countrysubdivisionitem', newCountrySubdivisionItem)
+                            .then(function (resp) {
+                                switch (resp.status) {
+                                    case 200:
+                                        app.clearCountrySubdivisionForm();
+                                        app.fetchData();
+                                        app.addCountrySubdivisionItemHandle();
+                                        break;
+
+                                    default:
+                                        alert('Unable to save country subdivision item');
+                                        break;
+                                }
+                            });
+                        break;
+
+                    default:
+                        axios.patch('/api/countrysubdivisionitem/' + newCountrySubdivisionItem.id, newCountrySubdivisionItem)
+                            .then(function (resp) {
+                                switch (resp.status) {
+                                    case 200:
+                                        app.clearCountrySubdivisionForm();
+                                        app.fetchData();
+                                        app.addCountrySubdivisionItemHandle();
+                                        break;
+
+                                    default:
+                                        alert('Unable to save country subdivision item');
+                                        break;
+                                }
+                            });
+                        break;
+                }
             }
         }
     }
